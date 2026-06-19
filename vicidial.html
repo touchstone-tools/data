@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ViciDial Filter Maker</title>
 
+<style>
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6fb;
+    padding: 25px;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+}
+
+/* Title */
+h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Input */
+textarea {
+    width: 100%;
+    height: 140px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    margin-bottom: 15px;
+    font-size: 14px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #2563eb;
+}
+
+/* Dropdown */
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    margin-bottom: 15px;
+    font-size: 14px;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* Buttons */
+button {
+    padding: 10px 16px;
+    margin-right: 6px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.generate {
+    background:#2563eb;
+    color:#fff;
+}
+
+.copy {
+    background:#16a34a;
+    color:#fff;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+/* Output */
+.output {
+    background: #111827;
+    color: #00ffcc;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 15px;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+/* ✅ Professional Watermark */
+.watermark {
+    position: fixed;
+    bottom: 12px;
+    right: 18px;
+    font-size: 12px;
+    color: #9ca3af;
+    font-weight: 500;
+    background: rgba(255,255,255,0.85);
+    padding: 5px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.watermark strong {
+    color: #111827;
+    font-weight: 600;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>⚙️ ViciDial Filter Maker</h2>
+
+<textarea id="inputData"
+placeholder="Paste ZIPs, States, Phone numbers, Status, etc..."></textarea>
+
+<select id="filterType">
+    <optgroup label="📍 Postal Code">
+        <option value="postal_in">postal_code IN</option>
+        <option value="postal_not_in">postal_code NOT IN</option>
+        <option value="postal_like">postal_code LIKE</option>
+    </optgroup>
+
+    <optgroup label="🌎 State">
+        <option value="state_in">state IN</option>
+        <option value="state_not_in">state NOT IN</option>
+    </optgroup>
+
+    <optgroup label="📞 Phone / Area Code">
+        <option value="phone_like">phone_number LIKE</option>
+        <option value="phone_not_like">phone_number NOT LIKE</option>
+    </optgroup>
+
+    <optgroup label="📊 Status">
+        <option value="status_in">status IN</option>
+        <option value="status_not_in">status NOT IN</option>
+    </optgroup>
+</select>
+
+<button class="generate" onclick="generate()">Generate</button>
+<button class="copy" onclick="copyText()">Copy</button>
+
+<div id="output" class="output"></div>
+
+</div>
+
+<!-- ✅ Beautiful Watermark -->
+<div class="watermark">
+    <span>Created by</span>
+    <strong>Nimo</strong>
+</div>
+
+<script>
+
+// ✅ Parse input
+function parseInput(input) {
+    return input
+        .split(/[\n, ]+/)
+        .map(v => v.trim())
+        .filter(v => v);
+}
+
+// ✅ Detect type (includes area code)
+function detectType(values) {
+
+    if (values.every(v => /^\d{5}$/.test(v))) return "postal_code";
+
+    if (values.every(v => /^[A-Za-z]{2}$/.test(v))) return "state";
+
+    if (values.every(v => /^\d{3}$/.test(v))) return "area_code";
+
+    if (values.every(v => /^\d{7,}$/.test(v))) return "phone_number";
+
+    if (values.every(v => /^[A-Z]+$/.test(v))) return "status";
+
+    return "postal_code";
+}
+
+// ✅ Generate filter
+function generate() {
+
+    const raw = document.getElementById("inputData").value.trim();
+    if (!raw) return;
+
+    const values = parseInput(raw);
+    const type = document.getElementById("filterType").value;
+
+    let output = "";
+    let formatted = values.map(v => `'${v}'`).join(", ");
+
+    switch(type) {
+
+        case "postal_in":
+            output = `postal_code IN (${formatted})`;
+            break;
+
+        case "postal_not_in":
+            output = `postal_code NOT IN (${formatted})`;
+            break;
+
+        case "postal_like":
+            output = values.map(v => `postal_code LIKE '${v}%'`).join(" OR ");
+            break;
+
+        case "state_in":
+            output = `state IN (${formatted})`;
+            break;
+
+        case "state_not_in":
+            output = `state NOT IN (${formatted})`;
+            break;
+
+        case "phone_like":
+            output = values.map(v => `phone_number LIKE '${v}%'`).join(" OR ");
+            break;
+
+        case "phone_not_like":
+            output = values.map(v => `phone_number NOT LIKE '${v}%'`).join(" AND ");
+            break;
+
+        case "status_in":
+            output = `status IN (${formatted})`;
+            break;
+
+        case "status_not_in":
+            output = `status NOT IN (${formatted})`;
+            break;
+    }
+
+    document.getElementById("output").innerText = output;
+}
+
+// ✅ Copy
+function copyText() {
+    const text = document.getElementById("output").innerText;
+    if (!text) return;
+
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
+
+</script>
+
+</body>
+</html>
