@@ -13,20 +13,61 @@ body {
     padding: 20px;
     background: #f5f7fb;
 }
+
+/* ✅ Top Right Navigation */
+.top-nav {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 999;
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, #111827, #374151);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.nav-btn:hover {
+    background: linear-gradient(135deg, #1f2937, #4b5563);
+    transform: translateY(-2px);
+}
+
+/* ✅ Inputs */
 textarea {
     width: 400px;
     height: 120px;
     padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
+
+/* ✅ Buttons */
 button {
-    padding: 8px 12px;
+    padding: 8px 14px;
     margin: 5px;
     cursor: pointer;
     border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: 0.2s;
 }
+
+button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
 .search { background: #007bff; color: white; }
 .download { background: #28a745; color: white; }
 
+/* ✅ Table */
 table {
     border-collapse: collapse;
     margin-top: 20px;
@@ -41,11 +82,24 @@ th {
     color: white;
 }
 
-.status { font-weight: bold; }
+table tr:hover {
+    background: #eef3ff;
+}
+
+.status {
+    font-weight: bold;
+}
 </style>
 
 </head>
 <body>
+
+<!-- ✅ TOP RIGHT BUTTON -->
+<div class="top-nav">
+    <a href="vicidial.html" class="nav-btn">
+        ⚙️ ViciDial Filter Maker
+    </a>
+</div>
 
 <h2>⚡ Fast ZIP Lookup + Excel Export</h2>
 
@@ -72,17 +126,14 @@ placeholder="Enter ZIPs (comma OR one per line)"></textarea>
 </table>
 
 <script>
-
 let zipMap = {};
 let currentResults = [];
 let jsonLoaded = false;
 
-// ✅ LOAD JSON (FAST)
+// ✅ LOAD JSON
 fetch('zipdata.json')
 .then(res => res.json())
 .then(data => {
-
-    // ✅ Build map efficiently
     for (let i = 0; i < data.length; i++) {
         let item = data[i];
         let zipStr = String(item.zip);
@@ -95,17 +146,14 @@ fetch('zipdata.json')
 
     document.getElementById("status").innerText =
         "✅ Loaded " + data.length + " records";
-
 })
 .catch(() => {
     document.getElementById("status").innerText =
         "⚠ Failed to load data";
 });
 
-
-// ✅ FAST SEARCH
+// ✅ SEARCH
 function searchZip() {
-
     if (!jsonLoaded) {
         alert("Data not loaded yet!");
         return;
@@ -115,10 +163,9 @@ function searchZip() {
     if (!input) return;
 
     const resultBody = document.getElementById("resultBody");
-
     const zips = input.split(/[\n,]+/);
 
-    let html = "";       // ✅ buffer
+    let html = "";
     currentResults = [];
 
     for (let i = 0; i < zips.length; i++) {
@@ -151,9 +198,7 @@ function searchZip() {
                 <td>${row.County || '-'}</td>
                 <td>${row["Area Codes"]}</td>
             </tr>`;
-
         } else {
-
             html += `
             <tr>
                 <td>${cleanZip}</td>
@@ -162,14 +207,11 @@ function searchZip() {
         }
     }
 
-    // ✅ SINGLE UPDATE → VERY FAST
     resultBody.innerHTML = html;
 }
 
-
 // ✅ EXCEL DOWNLOAD
 function downloadExcel() {
-
     if (currentResults.length === 0) {
         alert("No data to export!");
         return;
@@ -177,12 +219,21 @@ function downloadExcel() {
 
     const ws = XLSX.utils.json_to_sheet(currentResults);
     const wb = XLSX.utils.book_new();
-
     XLSX.utils.book_append_sheet(wb, ws, "ZIP Data");
-
     XLSX.writeFile(wb, "ZIP_Data.xlsx");
 }
+</script>
 
+<!-- ✅ css.js -->
+<script src="css.js"></script>
+
+<!-- ✅ Service Worker -->
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js");
+    });
+}
 </script>
 
 </body>
