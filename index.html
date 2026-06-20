@@ -12,13 +12,14 @@
     box-sizing: border-box;
 }
 
+/* ✅ Base */
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
     background: linear-gradient(135deg, #eef2ff, #f8fafc);
 }
 
-/* ✅ Top Bar */
+/* ✅ TOPBAR (same as ViciDial page) */
 .topbar {
     position: fixed;
     top: 0;
@@ -27,19 +28,18 @@ body {
     height: 60px;
     background: #111827;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     padding: 0 20px;
     z-index: 1000;
 }
 
-.title {
+.topbar-title {
     color: #fff;
     font-weight: 600;
     font-size: 16px;
 }
 
-/* ✅ Nav Button */
 .nav-btn {
     background: #2563eb;
     color: #fff;
@@ -55,35 +55,40 @@ body {
     background: #1d4ed8;
 }
 
-/* ✅ Content wrapper */
+/* ✅ Layout */
 .wrapper {
     padding-top: 90px;
 }
 
-/* ✅ Main Card */
 .container {
     max-width: 950px;
     margin: auto;
-    background: #ffffff;
+    background: #fff;
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* Heading */
+/* ✅ Title */
 h2 {
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #111827;
 }
 
-/* Status */
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* ✅ Status */
 .status {
     font-weight: 600;
     margin-bottom: 10px;
 }
 
-/* Input */
+/* ✅ Input */
 textarea {
     width: 100%;
     height: 120px;
@@ -99,7 +104,11 @@ textarea:focus {
     outline: none;
 }
 
-/* Buttons */
+/* ✅ Buttons */
+.actions {
+    margin-bottom: 10px;
+}
+
 button {
     padding: 10px 16px;
     margin-right: 6px;
@@ -112,30 +121,34 @@ button {
 
 .search {
     background: #2563eb;
-    color: white;
+    color: #fff;
 }
 
 .download {
     background: #16a34a;
-    color: white;
+    color: #fff;
 }
 
 button:hover {
     opacity: 0.9;
 }
 
-/* Table */
+/* ✅ Table */
+.table-wrapper {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
     font-size: 14px;
 }
 
 th {
     background: #2563eb;
     color: white;
-    padding: 10px;
+    padding: 12px;
     text-align: left;
 }
 
@@ -148,7 +161,7 @@ tr:hover {
     background: #f1f5ff;
 }
 
-/* Watermark */
+/* ✅ Watermark (same style as ViciDial) */
 .watermark {
     position: fixed;
     bottom: 10px;
@@ -170,25 +183,30 @@ tr:hover {
 
 <body>
 
-<!-- ✅ TOP BAR -->
+<!-- ✅ TOPBAR -->
 <div class="topbar">
-    <div class="title">ZIP Lookup System</div>
+    <div class="topbar-title">ZIP Lookup System</div>
     <a href="vicidial.html" class="nav-btn">⚙️ Filter Maker</a>
 </div>
 
 <div class="wrapper">
+
 <div class="container">
 
-<h2>⚡ Fast ZIP Lookup + Excel Export</h2>
+<h2>⚡ Fast ZIP Lookup</h2>
+<p class="subtitle">Search multiple ZIP codes instantly and export results to Excel.</p>
 
 <p id="status" class="status">⏳ Loading ZIP database...</p>
 
 <textarea id="zipInput"
-placeholder="Enter ZIPs (comma OR one per line)"></textarea>
+placeholder="Enter ZIPs (comma, space, or one per line)"></textarea>
 
-<button class="search" onclick="searchZip()">Search</button>
-<button class="download" onclick="downloadExcel()">Download Excel</button>
+<div class="actions">
+    <button class="search" onclick="searchZip()">Search</button>
+    <button class="download" onclick="downloadExcel()">Download Excel</button>
+</div>
 
+<div class="table-wrapper">
 <table>
 <thead>
 <tr>
@@ -201,6 +219,7 @@ placeholder="Enter ZIPs (comma OR one per line)"></textarea>
 </thead>
 <tbody id="resultBody"></tbody>
 </table>
+</div>
 
 </div>
 </div>
@@ -239,6 +258,7 @@ fetch('zipdata.json')
 
 // ✅ SEARCH
 function searchZip() {
+
     if (!jsonLoaded) {
         alert("Data not loaded yet!");
         return;
@@ -248,7 +268,7 @@ function searchZip() {
     if (!input) return;
 
     const resultBody = document.getElementById("resultBody");
-    const zips = input.split(/[\n,]+/);
+    const zips = input.split(/[\n, ]+/);
 
     let html = "";
     currentResults = [];
@@ -297,6 +317,7 @@ function searchZip() {
 
 // ✅ EXCEL DOWNLOAD
 function downloadExcel() {
+
     if (currentResults.length === 0) {
         alert("No data to export!");
         return;
@@ -304,7 +325,9 @@ function downloadExcel() {
 
     const ws = XLSX.utils.json_to_sheet(currentResults);
     const wb = XLSX.utils.book_new();
+
     XLSX.utils.book_append_sheet(wb, ws, "ZIP Data");
+
     XLSX.writeFile(wb, "ZIP_Data.xlsx");
 }
 
