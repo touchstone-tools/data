@@ -5,274 +5,151 @@
 <title>ViciDial Filter Maker</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    font-family: "Segoe UI", sans-serif;
+    background: #f4f6fb;
 }
 
-/* ✅ Top Bar */
-.topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+/* SAME NAVBAR */
+.navbar {
     height: 60px;
-    background: #111827;
+    background: #1f2937;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    z-index: 1000;
 }
 
-.topbar-title {
-    color: #fff;
-    font-weight: 600;
-    font-size: 16px;
-}
+.nav-title { color:#fff; font-weight:600; }
 
-.home-btn {
-    background: #2563eb;
-    color: #fff;
-    text-decoration: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.home-btn:hover {
-    background: #1d4ed8;
-}
-
-/* Wrapper */
-.wrapper {
-    padding-top: 90px;
-}
-
-/* Container */
-.container {
-    max-width: 900px;
-    margin: auto;
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-/* Title */
-h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: #111827;
-}
-
-/* Input */
-textarea {
-    width: 100%;
-    height: 140px;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-textarea:focus {
-    border-color: #2563eb;
-    outline: none;
-}
-
-/* Dropdown */
-select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-/* Buttons */
-button {
-    padding: 10px 16px;
-    margin-right: 6px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.generate {
+.nav-links a {
+    color:#fff;
+    text-decoration:none;
+    margin-left:10px;
+    padding:7px 12px;
     background:#2563eb;
-    color:#fff;
+    border-radius:6px;
+    font-size:13px;
 }
 
-.copy {
-    background:#16a34a;
-    color:#fff;
+/* SAME CARD UI */
+.wrapper { padding:70px 20px; }
+
+.card {
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 5px 25px rgba(0,0,0,0.08);
 }
 
-button:hover {
-    opacity: 0.9;
+textarea {
+    width:100%;
+    height:140px;
+    padding:12px;
+    margin-bottom:15px;
 }
 
-/* Output */
+select {
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+}
+
+button {
+    padding:10px 14px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    margin-right:5px;
+}
+
+.generate { background:#2563eb; color:#fff; }
+.copy { background:#16a34a; color:#fff; }
+
 .output {
-    background: #111827;
-    color: #00ffcc;
-    padding: 16px;
-    border-radius: 8px;
-    margin-top: 15px;
-    font-family: monospace;
-    white-space: pre-wrap;
+    background:#111;
+    color:#0f0;
+    padding:15px;
+    margin-top:15px;
 }
 
-/* Watermark */
+/* SAME WATERMARK */
 .watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 15px;
-    font-size: 12px;
-    background: rgba(255,255,255,0.9);
-    padding: 6px 12px;
-    border-radius: 20px;
-    color: #6b7280;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.watermark strong {
-    color: #111827;
+    position:fixed;
+    bottom:10px;
+    right:15px;
+    font-size:12px;
+    color:#999;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ✅ TOP BAR -->
-<div class="topbar">
-    <div class="topbar-title">ViciDial Filter Maker</div>
-    <a href="https://usdata.touchstone.workers.dev/" class="home-btn">🏠 Home</a>
+<!-- ✅ SAME NAVBAR -->
+<div class="navbar">
+    <div class="nav-title">CRM Tools</div>
+    <div class="nav-links">
+        <a href="index.html">ZIP Lookup</a>
+        <a href="vicidial.html">Filter Maker</a>
+    </div>
 </div>
 
 <div class="wrapper">
-<div class="container">
+<div class="card">
 
-<h2>Create Filters Instantly</h2>
+<h2>⚙️ ViciDial Filter Maker</h2>
 
-<textarea id="inputData"
-placeholder="Paste ZIPs, States, Phone numbers, Status, etc..."></textarea>
+<textarea id="inputData" placeholder="Paste data..."></textarea>
 
-<select id="filterType">
-    <optgroup label="📍 Postal Code">
-        <option value="postal_in">postal_code IN</option>
-        <option value="postal_not_in">postal_code NOT IN</option>
-        <option value="postal_like">postal_code LIKE</option>
-    </optgroup>
-
-    <optgroup label="🌎 State">
-        <option value="state_in">state IN</option>
-        <option value="state_not_in">state NOT IN</option>
-    </optgroup>
-
-    <optgroup label="📞 Phone / Area Code">
-        <option value="phone_like">phone_number LIKE</option>
-        <option value="phone_not_like">phone_number NOT LIKE</option>
-    </optgroup>
-
-    <optgroup label="📊 Status">
-        <option value="status_in">status IN</option>
-        <option value="status_not_in">status NOT IN</option>
-    </optgroup>
+<select id="type">
+<option value="postal_in">postal_code IN</option>
+<option value="state_in">state IN</option>
+<option value="phone_like">phone_number LIKE</option>
+<option value="status_in">status IN</option>
 </select>
 
-<button class="generate" onclick="generate()">Generate</button>
-<button class="copy" onclick="copyText()">Copy</button>
+<button class="generate" onclick="gen()">Generate</button>
+<button class="copy" onclick="copy()">Copy</button>
 
-<div id="output" class="output"></div>
+<div id="out" class="output"></div>
 
 </div>
 </div>
 
-<div class="watermark">
-    Created by <strong>Nimo</strong>
-</div>
+<div class="watermark">Created by Nimo</div>
 
 <script>
-
-// Parse input
-function parseInput(input) {
-    return input.split(/[\n, ]+/).map(v => v.trim()).filter(v => v);
+function parse(v){
+    return v.split(/[\n, ]+/).filter(x=>x);
 }
 
-// Generate filter
-function generate() {
+function gen(){
+    let val=parse(inputData.value);
+    let type=document.getElementById("type").value;
 
-    const raw = document.getElementById("inputData").value.trim();
-    if (!raw) return;
+    let list=val.map(v=>`'${v}'`).join(",");
 
-    const values = parseInput(raw);
-    const type = document.getElementById("filterType").value;
+    let out="";
+    if(type==='postal_in') out=`postal_code IN (${list})`;
+    if(type==='state_in') out=`state IN (${list})`;
+    if(type==='phone_like') out=val.map(v=>`phone_number LIKE '${v}%'`).join(" OR ");
+    if(type==='status_in') out=`status IN (${list})`;
 
-    let formatted = values.map(v => `'${v}'`).join(", ");
-    let output = "";
-
-    switch(type) {
-        case "postal_in":
-            output = `postal_code IN (${formatted})`;
-            break;
-
-        case "postal_not_in":
-            output = `postal_code NOT IN (${formatted})`;
-            break;
-
-        case "postal_like":
-            output = values.map(v => `postal_code LIKE '${v}%'`).join(" OR ");
-            break;
-
-        case "state_in":
-            output = `state IN (${formatted})`;
-            break;
-
-        case "state_not_in":
-            output = `state NOT IN (${formatted})`;
-            break;
-
-        case "phone_like":
-            output = values.map(v => `phone_number LIKE '${v}%'`).join(" OR ");
-            break;
-
-        case "phone_not_like":
-            output = values.map(v => `phone_number NOT LIKE '${v}%'`).join(" AND ");
-            break;
-
-        case "status_in":
-            output = `status IN (${formatted})`;
-            break;
-
-        case "status_not_in":
-            output = `status NOT IN (${formatted})`;
-            break;
-    }
-
-    document.getElementById("output").innerText = output;
+    document.getElementById("out").innerText=out;
 }
 
-// Copy
-function copyText() {
-    const text = document.getElementById("output").innerText;
-    if (!text) return;
-
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
+function copy(){
+    navigator.clipboard.writeText(out.innerText);
+    alert("Copied");
 }
-
 </script>
 
 </body>
 </html>
+``
