@@ -5,44 +5,69 @@
 <title>ViciDial Filter Maker</title>
 
 <style>
-body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #f4f6fb;
-    padding: 25px;
-    margin: 0;
+* {
+    box-sizing: border-box;
 }
 
-/* ✅ Home Buttonpx;/* ✅ Home Button */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+}
+
+/* ✅ Top Navigation */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
     background: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+}
+
+.topbar-title {
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.home-btn {
+    background: #2563eb;
     color: #fff;
     text-decoration: none;
     padding: 8px 14px;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 13px;
     font-weight: 600;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    transition: 0.2s;
 }
 
 .home-btn:hover {
-    background: #374151;
-    transform: translateY(-1px);
+    background: #1d4ed8;
 }
 
-/* Container */
+/* ✅ Main Container */
+.wrapper {
+    padding-top: 90px;
+}
+
 .container {
     max-width: 900px;
     margin: auto;
     background: #ffffff;
     padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 /* Title */
 h2 {
+    margin-top: 0;
     margin-bottom: 20px;
-    font-weight: 600;
     color: #111827;
 }
 
@@ -55,11 +80,11 @@ textarea {
     border: 1px solid #d1d5db;
     margin-bottom: 15px;
     font-size: 14px;
-    outline: none;
 }
 
 textarea:focus {
     border-color: #2563eb;
+    outline: none;
 }
 
 /* Dropdown */
@@ -70,7 +95,6 @@ select {
     border: 1px solid #d1d5db;
     margin-bottom: 15px;
     font-size: 14px;
-    background: #fff;
 }
 
 /* Buttons */
@@ -81,7 +105,6 @@ button {
     border: none;
     cursor: pointer;
     font-weight: 600;
-    transition: 0.2s;
 }
 
 .generate {
@@ -95,8 +118,7 @@ button {
 }
 
 button:hover {
-    transform: translateY(-1px);
-    opacity: 0.95;
+    opacity: 0.9;
 }
 
 /* Output */
@@ -106,42 +128,41 @@ button:hover {
     padding: 16px;
     border-radius: 8px;
     margin-top: 15px;
-    white-space: pre-wrap;
     font-family: monospace;
+    white-space: pre-wrap;
 }
 
 /* ✅ Professional Watermark */
 .watermark {
     position: fixed;
-    bottom: 12px;
-    right: 18px;
+    bottom: 10px;
+    right: 15px;
     font-size: 12px;
-    color: #9ca3af;
-    font-weight: 500;
-    background: rgba(255,255,255,0.85);
-    padding: 5px 12px;
+    background: rgba(255,255,255,0.9);
+    padding: 6px 12px;
     border-radius: 20px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    display: flex;
-    gap: 5px;
+    color: #6b7280;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 .watermark strong {
     color: #111827;
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- ✅ HOME BUTTON -->
-<a href="index.html" class="home-btn">🏠 Home</a>
+<!-- ✅ TOP BAR -->
+<div class="topbar">
+    <div class="topbar-title">ViciDial Filter Maker</div>
+    <a href="index.html" class="home-btn">🏠 Home</a>
+</div>
 
+<div class="wrapper">
 <div class="container">
 
-<h2>⚙️ ViciDial Filter Maker</h2>
+<h2>Create Filters Instantly</h2>
 
 <textarea id="inputData"
 placeholder="Paste ZIPs, States, Phone numbers, Status, etc..."></textarea>
@@ -175,34 +196,18 @@ placeholder="Paste ZIPs, States, Phone numbers, Status, etc..."></textarea>
 <div id="output" class="output"></div>
 
 </div>
+</div>
 
-<!-- ✅ WATERMARK -->
 <div class="watermark">
-    <span>Created by</span>
-    <strong>Nimo</strong>
+    Created by <strong>Nimo</strong>
 </div>
 
 <script>
 
-// Parse input
 function parseInput(input) {
-    return input
-        .split(/[\n, ]+/)
-        .map(v => v.trim())
-        .filter(v => v);
+    return input.split(/[\n, ]+/).map(v => v.trim()).filter(v => v);
 }
 
-// Detect type (includes area code)
-function detectType(values) {
-    if (values.every(v => /^\d{5}$/.test(v))) return "postal_code";
-    if (values.every(v => /^[A-Za-z]{2}$/.test(v))) return "state";
-    if (values.every(v => /^\d{3}$/.test(v))) return "area_code";
-    if (values.every(v => /^\d{7,}$/.test(v))) return "phone_number";
-    if (values.every(v => /^[A-Z]+$/.test(v))) return "status";
-    return "postal_code";
-}
-
-// Generate filter
 function generate() {
 
     const raw = document.getElementById("inputData").value.trim();
@@ -255,7 +260,6 @@ function generate() {
     document.getElementById("output").innerText = output;
 }
 
-// Copy
 function copyText() {
     const text = document.getElementById("output").innerText;
     if (!text) return;
@@ -268,6 +272,3 @@ function copyText() {
 
 </body>
 </html>
-.home-btn {
-    position: fixed;
-    top: 15px;
