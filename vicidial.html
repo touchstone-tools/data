@@ -15,7 +15,7 @@ body {
     background: linear-gradient(135deg, #eef2ff, #f8fafc);
 }
 
-/* ✅ Top Navigation */
+/* ✅ Top Bar */
 .topbar {
     position: fixed;
     top: 0;
@@ -50,11 +50,12 @@ body {
     background: #1d4ed8;
 }
 
-/* ✅ Main Container */
+/* Wrapper */
 .wrapper {
     padding-top: 90px;
 }
 
+/* Container */
 .container {
     max-width: 900px;
     margin: auto;
@@ -132,7 +133,7 @@ button:hover {
     white-space: pre-wrap;
 }
 
-/* ✅ Professional Watermark */
+/* Watermark */
 .watermark {
     position: fixed;
     bottom: 10px;
@@ -156,7 +157,7 @@ button:hover {
 <!-- ✅ TOP BAR -->
 <div class="topbar">
     <div class="topbar-title">ViciDial Filter Maker</div>
-    <a href="index.html" class="home-btn">🏠 Home</a>
+    <a href="https://usdata.touchstone.workers.dev/" class="home-btn">🏠 Home</a>
 </div>
 
 <div class="wrapper">
@@ -204,10 +205,12 @@ placeholder="Paste ZIPs, States, Phone numbers, Status, etc..."></textarea>
 
 <script>
 
+// Parse input
 function parseInput(input) {
     return input.split(/[\n, ]+/).map(v => v.trim()).filter(v => v);
 }
 
+// Generate filter
 function generate() {
 
     const raw = document.getElementById("inputData").value.trim();
@@ -260,6 +263,7 @@ function generate() {
     document.getElementById("output").innerText = output;
 }
 
+// Copy
 function copyText() {
     const text = document.getElementById("output").innerText;
     if (!text) return;
