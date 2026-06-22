@@ -1,68 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>ViciDial Filter Maker</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Database - ViciDial Filter Maker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="navbar">
-    <div class="nav-title">CRM Tools</div>
+    <div class="nav-title">US <span>Database</span></div>
     <div class="nav-links">
         <a href="index.html">ZIP Lookup</a>
-        <a href="vicidial.html">Filter Maker</a>
+        <a href="vicidial.html" class="active">ViciDial Filter</a>
     </div>
 </div>
 
 <div class="wrapper">
-<div class="card">
+    <div class="card">
+        <h2>⚙️ ViciDial Filter Maker</h2>
+        <span id="status">SQL Clause Query Engine</span>
 
-<h2>⚙️ ViciDial Filter Maker</h2>
+        <textarea id="inputData" placeholder="Paste structural entries here (ZIPs, States, Phone variations, or Status tags)..."></textarea>
 
-<textarea id="inputData" placeholder="Paste data..."></textarea>
+        <select id="type">
+            <option value="postal_in">postal_code IN (SQL Multi-match Array)</option>
+            <option value="state_in">state IN (SQL Multi-match Array)</option>
+            <option value="phone_like">phone_number LIKE (SQL Wildcard Matching)</option>
+            <option value="status_in">status IN (SQL Multi-match Array)</option>
+        </select>
 
-<select id="type">
-<option value="postal_in">postal_code IN</option>
-<option value="state_in">state IN</option>
-<option value="phone_like">phone_number LIKE</option>
-<option value="status_in">status IN</option>
-</select>
+        <div class="btn-container">
+            <button class="generate" onclick="gen()">Generate Clause</button>
+            <button class="copy" onclick="copy()">Copy Output</button>
+        </div>
 
-<button class="search" onclick="gen()">Generate</button>
-<button class="copy" onclick="copy()">Copy</button>
-
-<div id="out" class="output"></div>
-
-</div>
+        <div id="out" class="output">Generated multi-line system queries will render inside this console interface...</div>
+    </div>
 </div>
 
 <div class="watermark">Created by Nimo</div>
 
 <script>
 function parse(v){
-    return v.split(/[\n, ]+/).filter(x=>x);
+    return v
+        .split(/[\n, ]+/)
+        .map(x => x.trim())
+        .filter(x => x);
 }
 
 function gen(){
-    let val=parse(inputData.value);
-    let type=document.getElementById("type").value;
+    const val = parse(document.getElementById("inputData").value);
+    const type = document.getElementById("type").value;
+    const outputBox = document.getElementById("out");
 
-    let list=val.map(v=>`'${v}'`).join(",");
+    if(val.length === 0){
+        outputBox.innerText = "⚠ System syntax prompt error: Please fill in target strings.";
+        outputBox.style.color = "#f43f5e";
+        return;
+    }
+    
+    outputBox.style.color = "#38bdf8"; // Reset text colors to safe system teal
 
-    let out="";
-    if(type==='postal_in') out=`postal_code IN (${list})`;
-    if(type==='state_in') out=`state IN (${list})`;
-    if(type==='phone_like') out=val.map(v=>`phone_number LIKE '${v}%'`).join(" OR ");
-    if(type==='status_in') out=`status IN (${list})`;
+    const list = val.map(v => `'${v}'`).join(", ");
+    let result = "";
 
-    document.getElementById("out").innerText=out;
+    if(type === 'postal_in')
+        result = `postal_code IN (${list})`;
+
+    else if(type === 'state_in')
+        result = `state IN (${list})`;
+
+    else if(type === 'phone_like')
+        result = val.map(v => `phone_number LIKE '${v}%'`).join(" OR ");
+
+    else if(type === 'status_in')
+        result = `status IN (${list})`;
+
+    outputBox.innerText = result;
 }
 
 function copy(){
-    navigator.clipboard.writeText(out.innerText);
-    alert("Copied");
+    const output = document.getElementById("out").innerText;
+
+    if(!output || output.startsWith("Generated multi-line") || output.startsWith("⚠")){
+        alert("No valid system SQL configurations prepared for deployment!");
+        return;
+    }
+
+    navigator.clipboard.writeText(output).then(() => {
+        alert("SQL command clause successfully written to your local clipboard memory!");
+    }).catch(err => {
+        alert("Clipboard write failed. Please manually select text block.");
+    });
 }
 </script>
 
