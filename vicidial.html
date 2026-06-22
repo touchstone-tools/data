@@ -42,19 +42,19 @@
 <div class="watermark">Created by Nimo</div>
 
 <script>
-function parse(v){
+function parse(v) {
     return v
         .split(/[\n, ]+/)
         .map(x => x.trim())
         .filter(x => x);
 }
 
-function gen(){
+function gen() {
     const val = parse(document.getElementById("inputData").value);
     const type = document.getElementById("type").value;
     const outputBox = document.getElementById("out");
 
-    if(val.length === 0){
+    if (val.length === 0) {
         outputBox.innerText = "⚠ System syntax prompt error: Please fill in target strings.";
         outputBox.style.color = "#f43f5e";
         return;
@@ -62,29 +62,29 @@ function gen(){
     
     outputBox.style.color = "#38bdf8"; 
 
-    // Fixed: Changed from .join(", ") to strictly .join(",")
+    // Strict formatting: Items joined directly as '12345','67890' with no space
     const list = val.map(v => `'${v}'`).join(",");
     let result = "";
 
-    if(type === 'postal_in')
+    if (type === 'postal_in')
         result = `postal_code IN (${list})`;
 
-    else if(type === 'state_in')
+    else if (type === 'state_in')
         result = `state IN (${list})`;
 
-    else if(type === 'phone_like')
+    else if (type === 'phone_like')
         result = val.map(v => `phone_number LIKE '${v}%'`).join(" OR ");
 
-    else if(type === 'status_in')
+    else if (type === 'status_in')
         result = `status IN (${list})`;
 
     outputBox.innerText = result;
 }
 
-function copy(){
+function copy() {
     const output = document.getElementById("out").innerText;
 
-    if(!output || output.startsWith("Generated multi-line") || output.startsWith("⚠")){
+    if (!output || output.startsWith("Generated multi-line") || output.startsWith("⚠")) {
         alert("No valid system SQL configurations prepared for deployment!");
         return;
     }
