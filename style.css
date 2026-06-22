@@ -80,15 +80,27 @@ h2 {
     margin-bottom: 8px;
 }
 
+/* Reactive Status Badges */
 #status {
     font-size: 13px;
     color: #64748b;
     margin-bottom: 20px;
     display: inline-block;
     background: #f1f5f9;
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 12px;
-    font-weight: 500;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#status.loaded {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+#status.error {
+    background: #fee2e2;
+    color: #991b1b;
 }
 
 /* Inputs & Form Controls */
