@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Fast ZIP Lookup</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Database - ZIP Lookup</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
-
 <body>
 
 <div class="navbar">
-    <div class="nav-title">CRM Tools</div>
+    <div class="nav-title">US <span>Database</span></div>
     <div class="nav-links">
-        <a href="index.html">ZIP Lookup</a>
-        <a href="vicidial.html">Filter Maker</a>
+        <a href="index.html" class="active">ZIP Lookup</a>
+        <a href="vicidial.html">ViciDial Filter</a>
     </div>
 </div>
 
 <div class="wrapper">
-<div class="card">
+    <div class="card">
+        <h2>⚡ Fast ZIP Lookup + Excel Export</h2>
+        <span id="status">Loading data...</span>
 
-<h2>⚡ Fast ZIP Lookup + Excel Export</h2>
+        <textarea id="zipInput" placeholder="Paste ZIP codes here (separated by commas, spaces, or newlines)..."></textarea>
 
-<p id="status">Loading data...</p>
+        <div class="btn-container">
+            <button class="search" onclick="searchZip()">Search Database</button>
+            <button class="download" onclick="downloadExcel()">Export Excel</button>
+        </div>
 
-<textarea id="zipInput" placeholder="Enter ZIPs..."></textarea>
-
-<button class="search" onclick="searchZip()">Search</button>
-<button class="download" onclick="downloadExcel()">Download</button>
-
-<table>
-<thead>
-<tr>
-<th>ZIP</th>
-<th>City</th>
-<th>State</th>
-<th>County</th>
-<th>Area Codes</th>
-</tr>
-</thead>
-<tbody id="resultBody"></tbody>
-</table>
-
-</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ZIP</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>County</th>
+                    <th>Area Codes</th>
+                </tr>
+            </thead>
+            <tbody id="resultBody">
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #94a3b8; padding: 30px;">Enter ZIP numbers above to process lookup data.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="watermark">Created by Nimo</div>
 
 <script>
 let zipMap={}, currentResults=[], jsonLoaded=false;
+const statusEl = document.getElementById('status');
 
 fetch('zipdata.json')
 .then(r=>r.json())
@@ -59,43 +63,49 @@ fetch('zipdata.json')
         zipMap[z.padStart(5,'0')]=item;
     });
     jsonLoaded=true;
-    status.innerText="Loaded "+data.length;
+    statusEl.innerText="Database Records Active: "+data.length;
+}).catch(err => {
+    statusEl.innerText = "Error loading zipdata.json database file.";
+    statusEl.style.background = "#fee2e2";
+    statusEl.style.color = "#ef4444";
 });
 
 function searchZip(){
-    let input=zipInput.value.trim();
-    if(!input||!jsonLoaded) return;
+    let input=document.getElementById("zipInput").value.trim();
+    if(!input) return;
+    if(!jsonLoaded) { alert("Database still initializing. Please wait."); return; }
 
     let zips=input.split(/[\n, ]+/);
     let html="";
     currentResults=[];
 
     zips.forEach(z=>{
+        if(!z) return;
         let r=zipMap[z]||zipMap[String(parseInt(z))]||zipMap[z.padStart(5,'0')];
 
         if(r){
             currentResults.push(r);
             html+=`<tr>
-                <td>${z}</td>
-                <td>${r.primary_city}</td>
+                <td><strong>${z}</strong></td>
+                <td>${r.primary_city || r.city || '-'}</td>
                 <td>${r.state}</td>
                 <td>${r.county||'-'}</td>
-                <td>${r.area_codes}</td>
+                <td>${r.area_codes||'-'}</td>
             </tr>`;
         } else {
-            html+=`<tr><td>${z}</td><td colspan="4">No Record</td></tr>`;
+            html+=`<tr><td><strong>${z}</strong></td><td colspan="4" style="color: #ef4444;">No Record Found</td></tr>`;
         }
     });
 
-    resultBody.innerHTML=html;
+    document.getElementById("resultBody").innerHTML=html || '<tr><td colspan="5" style="text-align:center;">No valid input detected.</td></tr>';
 }
 
 function downloadExcel(){
-    if(!currentResults.length) return alert("No data");
+    if(!currentResults.length) return alert("No valid result data available to export!");
     let ws=XLSX.utils.json_to_sheet(currentResults);
     let wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,"Data");
-    XLSX.writeFile(wb,"ZIP.xlsx");
+    XLSX.utils.book_append_sheet(wb,ws,"US_Database_Export");
+    XLSX.writeFile(wb,"US_DB_ZIP_Export.xlsx");
 }
 </script>
 
