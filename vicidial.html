@@ -62,7 +62,8 @@ function gen(){
     
     outputBox.style.color = "#38bdf8"; 
 
-    const list = val.map(v => `'${v}'`).join(", ");
+    // Fixed: Changed from .join(", ") to strictly .join(",")
+    const list = val.map(v => `'${v}'`).join(",");
     let result = "";
 
     if(type === 'postal_in')
