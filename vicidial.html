@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Database - ViciDial Filter Maker</title>
+    <title>ViciDial Filter Maker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="navbar">
-    <div class="nav-title">US <span>Database</span></div>
+    <div class="nav-title">ViciDial <span>Filter</span></div>
     <div class="nav-links">
-        <a href="index.html">ZIP Lookup</a>
+        <a href="https://usdata.touchstone.workers.dev/">ZIP Lookup</a>
         <a href="vicidial.html" class="active">ViciDial Filter</a>
     </div>
 </div>
@@ -24,10 +24,10 @@
         <textarea id="inputData" placeholder="Paste structural entries here (ZIPs, States, Phone variations, or Status tags)..."></textarea>
 
         <select id="type">
-            <option value="postal_in">postal_code IN (SQL Multi-match Array)</option>
-            <option value="state_in">state IN (SQL Multi-match Array)</option>
-            <option value="phone_like">phone_number LIKE (SQL Wildcard Matching)</option>
-            <option value="status_in">status IN (SQL Multi-match Array)</option>
+            <option value="postal_in">postal_code IN (...) → Matches multiple exact 5-digit ZIP codes</option>
+            <option value="state_in">state IN (...) → Filters by an array of exact 2-letter State abbreviations</option>
+            <option value="phone_like">phone_number LIKE '%...' → Wildcard match for specific Area Codes / Prefixes</option>
+            <option value="status_in">status IN (...) → Targets leads matching specific Call Dispositions (e.g., NEW, A)</option>
         </select>
 
         <div class="btn-container">
@@ -60,7 +60,7 @@ function gen(){
         return;
     }
     
-    outputBox.style.color = "#38bdf8"; // Reset text colors to safe system teal
+    outputBox.style.color = "#38bdf8"; 
 
     const list = val.map(v => `'${v}'`).join(", ");
     let result = "";
