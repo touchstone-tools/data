@@ -63,11 +63,12 @@ fetch('zipdata.json')
         zipMap[z.padStart(5,'0')]=item;
     });
     jsonLoaded=true;
-    statusEl.innerText="Database Records Active: "+data.length;
+    // Applied success status state
+    statusEl.classList.add('loaded');
+    statusEl.innerText="✓ Database Loaded (" + data.length + " Records)";
 }).catch(err => {
+    statusEl.classList.add('error');
     statusEl.innerText = "Error loading zipdata.json database file.";
-    statusEl.style.background = "#fee2e2";
-    statusEl.style.color = "#ef4444";
 });
 
 function searchZip(){
@@ -100,6 +101,7 @@ function searchZip(){
     document.getElementById("resultBody").innerHTML=html || '<tr><td colspan="5" style="text-align:center;">No valid input detected.</td></tr>';
 }
 
+// Global scope export method
 function downloadExcel(){
     if(!currentResults.length) return alert("No valid result data available to export!");
     let ws=XLSX.utils.json_to_sheet(currentResults);
