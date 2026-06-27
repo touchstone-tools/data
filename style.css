@@ -44,82 +44,99 @@ body {
 
 /* Layout */
 .wrapper {
-    padding: 30px;
+    padding: 40px 20px;
 }
 
 .card {
     max-width: 1000px;
     margin: auto;
-    background: #fff;
-    padding: 25px;
+    background: #ffffff;
+    padding: 30px;
     border-radius: 8px;
+    border: 1px solid #e2e8f0;
 }
 
-/* ✅ TOP ROW */
+/* ✅ TOP ROW (ONLY CHANGE THAT ADDS PIVOT) */
 .top-row {
     display: flex;
     gap: 20px;
+    align-items: flex-start;
 }
 
-/* Left */
+/* Left content stays same */
 .left-panel {
     flex: 3;
 }
 
-/* ✅ WHITE PIVOT BOX */
+/* ✅ Pivot box (matches your original design system) */
 .pivot-box {
     flex: 1;
     background: #ffffff;
-    padding: 12px;
-    border-radius: 8px;
     border: 1px solid #e2e8f0;
-    min-width: 230px;
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 240px;
 }
 
+/* Pivot title */
 .pivot-box h3 {
     margin: 0 0 10px 0;
     font-size: 16px;
-    color: #000;
+    color: #0f172a;
 }
 
+/* Pivot table uses SAME style as main table */
 .pivot-box table {
     width: 100%;
+    border-collapse: collapse;
     font-size: 13px;
 }
 
 .pivot-box th {
-    background: #f1f5f9;
-    color: #000;
+    background: #f8fafc;
+    color: #475569;
+    padding: 8px;
+    border-bottom: 2px solid #e2e8f0;
+    text-align: left;
 }
 
 .pivot-box td {
-    color: #000;
-}
-
-.pivot-box th,
-.pivot-box td {
-    padding: 6px;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 8px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
 }
 
 /* Inputs */
 textarea {
     width: 100%;
     height: 120px;
-    margin: 10px 0;
-    padding: 10px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
 /* Buttons */
 .btn-container {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
 button {
-    padding: 8px 12px;
+    padding: 10px 18px;
     border: none;
+    border-radius: 6px;
     cursor: pointer;
-    margin-right: 5px;
+    font-weight: 600;
 }
 
 .search {
@@ -127,36 +144,71 @@ button {
     color: #fff;
 }
 
+.search:hover {
+    background: #0369a1;
+}
+
 .download {
     background: #10b981;
     color: #fff;
 }
 
-/* Table */
+.download:hover {
+    background: #047857;
+}
+
+/* Tables */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
 }
 
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+th {
+    background: #f8fafc;
+    color: #475569;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+tr:hover td {
+    background: #f8fafc;
 }
 
 /* Status */
+#status {
+    font-size: 13px;
+    color: #64748b;
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
 #status.loaded {
     background: #d1fae5;
     color: #065f46;
-    padding: 5px 10px;
-    border-radius: 10px;
+}
+
+#status.error {
+    background: #fee2e2;
+    color: #991b1b;
 }
 
 /* Watermark */
 .watermark {
     position: fixed;
-    bottom: 10px;
-    right: 15px;
+    bottom: 15px;
+    right: 20px;
     font-size: 11px;
-    color: #888;
+    color: #94a3b8;
 }
