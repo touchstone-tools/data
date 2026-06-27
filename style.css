@@ -213,3 +213,48 @@ tr:hover td {
     color: #94a3b8;
     font-weight: 500;
 }
+/* ✅ TOP ROW LAYOUT (important) */
+.top-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* LEFT SIDE */
+.left-panel {
+    flex: 3;
+}
+
+/* ✅ RIGHT SMALL BOX (pivot at top-right) */
+.pivot-box {
+    flex: 1;
+    background: #0f172a;
+    padding: 12px;
+    border-radius: 10px;
+    min-width: 230px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+/* Title */
+.pivot-box h3 {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    color: #38bdf8;
+}
+
+/* Table */
+.pivot-box table {
+    width: 100%;
+    font-size: 13px;
+}
+
+/* Cell spacing */
+.pivot-box th,
+.pivot-box td {
+    padding: 6px;
+}
+
+/* Header style */
+.pivot-box th {
+    color: #94a3b8;
+}
