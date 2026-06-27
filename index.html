@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US Database - ZIP Lookup</title>
+
     <link rel="stylesheet" href="style.css">
 
-    <!-- ✅ FIXED MISSING SCRIPT -->
+    <!-- ✅ Excel Library (FIXED) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 
@@ -16,7 +17,7 @@
 <div class="navbar">
     <div class="nav-title">US <span>Database</span></div>
     <div class="nav-links">
-        <a href="https://usdata.touchstone.workers.dev/" class="active">ZIP Lookup</a>
+        <a href="#" class="active">ZIP Lookup</a>
         <a href="vicidial.html">ViciDial Filter</a>
     </div>
 </div>
@@ -24,10 +25,10 @@
 <div class="wrapper">
     <div class="card">
 
-        <!-- ✅ TOP ROW (LEFT + RIGHT) -->
+        <!-- ✅ TOP ROW -->
         <div class="top-row">
 
-            <!-- LEFT SIDE -->
+            <!-- LEFT -->
             <div class="left-panel">
                 <h2>⚡ Fast ZIP Lookup + Excel Export</h2>
                 <span id="status">Loading data...</span>
@@ -41,7 +42,7 @@
                 </div>
             </div>
 
-            <!-- ✅ RIGHT TOP (PIVOT TABLE) -->
+            <!-- ✅ RIGHT (WHITE PIVOT) -->
             <div class="pivot-box">
                 <h3>📊 State Summary</h3>
                 <table>
@@ -53,7 +54,7 @@
                     </thead>
                     <tbody id="pivotBody">
                         <tr>
-                            <td colspan="2" style="text-align:center;color:#94a3b8;">
+                            <td colspan="2" style="text-align:center;color:#6b7280;">
                                 Run search to see summary
                             </td>
                         </tr>
@@ -63,7 +64,7 @@
 
         </div>
 
-        <!-- ✅ RESULTS TABLE (FULL WIDTH BELOW) -->
+        <!-- ✅ RESULT TABLE -->
         <table>
             <thead>
                 <tr>
@@ -107,7 +108,7 @@ fetch('zipdata.json')
     statusEl.classList.add('loaded');
     statusEl.innerText = "✓ Database Loaded (" + data.length + " Records)";
 })
-.catch(err => {
+.catch(() => {
     statusEl.classList.add('error');
     statusEl.innerText = "Error loading zipdata.json database file.";
 });
@@ -150,8 +151,7 @@ function searchZip() {
         }
     });
 
-    document.getElementById("resultBody").innerHTML =
-        html || `<tr><td colspan="5" style="text-align:center;">No valid input detected.</td></tr>`;
+    document.getElementById("resultBody").innerHTML = html;
 
     /* ✅ PIVOT LOGIC */
     let stateCounts = {};
@@ -166,7 +166,6 @@ function searchZip() {
     Object.entries(stateCounts)
         .sort((a, b) => b[1] - a[1])
         .forEach(([state, count]) => {
-
             pivotHtml += `
                 <tr>
                     <td>${state}</td>
