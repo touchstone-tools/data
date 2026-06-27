@@ -4,12 +4,12 @@
 
 body {
     margin: 0;
-    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    font-family: "Segoe UI", sans-serif;
     background: #f4f6f9;
     color: #333;
 }
 
-/* Zoho CRM Inspired Navbar */
+/* Navbar */
 .navbar {
     height: 55px;
     background: #1e293b;
@@ -17,244 +17,146 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 24px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .nav-title {
     color: #ffffff;
     font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-weight: bold;
 }
 
 .nav-title span {
     color: #38bdf8;
 }
 
-.nav-links {
-    display: flex;
-    gap: 8px;
-    height: 100%;
-    align-items: center;
-}
-
 .nav-links a {
     color: #94a3b8;
     text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.nav-links a:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
+    margin-left: 10px;
 }
 
 .nav-links a.active {
-    color: #ffffff;
+    color: #fff;
     background: #0284c7;
+    padding: 5px 10px;
+    border-radius: 4px;
 }
 
-/* Layout Framework */
+/* Layout */
 .wrapper {
-    padding: 40px 20px;
+    padding: 30px;
 }
 
 .card {
     max-width: 1000px;
     margin: auto;
-    background: #ffffff;
-    padding: 30px;
+    background: #fff;
+    padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    border: 1px solid #e2e8f0;
 }
 
-h2 {
-    margin-top: 0;
-    color: #0f172a;
-    font-size: 22px;
-    margin-bottom: 8px;
-}
-
-/* Reactive Status Badges */
-#status {
-    font-size: 13px;
-    color: #64748b;
-    margin-bottom: 20px;
-    display: inline-block;
-    background: #f1f5f9;
-    padding: 6px 12px;
-    border-radius: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-#status.loaded {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-#status.error {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-/* Inputs & Form Controls */
-textarea {
-    width: 100%;
-    height: 120px;
-    padding: 12px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    font-family: inherit;
-    resize: vertical;
-    outline: none;
-}
-
-textarea:focus, select:focus {
-    border-color: #0284c7;
-    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-}
-
-select {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    background-color: #fff;
-    outline: none;
-}
-
-/* Action Buttons */
-.btn-container {
-    margin-bottom: 25px;
-    display: flex;
-    gap: 10px;
-}
-
-button {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    transition: background 0.2s ease;
-}
-
-.search, .generate { 
-    background: #0284c7; 
-    color: #fff; 
-}
-.search:hover, .generate:hover { 
-    background: #0369a1; 
-}
-
-.download, .copy { 
-    background: #10b981; 
-    color: #fff; 
-}
-.download:hover, .copy:hover { 
-    background: #047857; 
-}
-
-/* Table Framework (index.html) */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-th {
-    background: #f8fafc;
-    color: #475569;
-    text-align: left;
-    padding: 12px;
-    font-weight: 600;
-    border-bottom: 2px solid #e2e8f0;
-}
-
-td {
-    padding: 12px;
-    border-bottom: 1px solid #e2e8f0;
-    color: #334155;
-}
-
-tr:hover td {
-    background: #f8fafc;
-}
-
-/* CLI Output (vicidial.html) */
-.output {
-    background: #0f172a;
-    color: #38bdf8;
-    padding: 16px;
-    margin-top: 15px;
-    border-radius: 6px;
-    font-family: "Courier New", Courier, monospace;
-    white-space: pre-wrap;
-    word-break: break-all;
-    border-left: 4px solid #0284c7;
-}
-
-/* Watermark */
-.watermark {
-    position: fixed;
-    bottom: 15px;
-    right: 20px;
-    font-size: 11px;
-    color: #94a3b8;
-    font-weight: 500;
-}
-/* ✅ TOP ROW LAYOUT (important) */
+/* ✅ TOP ROW */
 .top-row {
     display: flex;
     gap: 20px;
-    align-items: flex-start;
 }
 
-/* LEFT SIDE */
+/* Left */
 .left-panel {
     flex: 3;
 }
 
-/* ✅ RIGHT SMALL BOX (pivot at top-right) */
+/* ✅ WHITE PIVOT BOX */
 .pivot-box {
     flex: 1;
-    background: #0f172a;
+    background: #ffffff;
     padding: 12px;
-    border-radius: 10px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
     min-width: 230px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 
-/* Title */
 .pivot-box h3 {
-    font-size: 16px;
     margin: 0 0 10px 0;
-    color: #38bdf8;
+    font-size: 16px;
+    color: #000;
 }
 
-/* Table */
 .pivot-box table {
     width: 100%;
     font-size: 13px;
 }
 
-/* Cell spacing */
+.pivot-box th {
+    background: #f1f5f9;
+    color: #000;
+}
+
+.pivot-box td {
+    color: #000;
+}
+
 .pivot-box th,
 .pivot-box td {
     padding: 6px;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-/* Header style */
-.pivot-box th {
-    color: #94a3b8;
+/* Inputs */
+textarea {
+    width: 100%;
+    height: 120px;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+/* Buttons */
+.btn-container {
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.search {
+    background: #0284c7;
+    color: #fff;
+}
+
+.download {
+    background: #10b981;
+    color: #fff;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Status */
+#status.loaded {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+/* Watermark */
+.watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    font-size: 11px;
+    color: #888;
 }
