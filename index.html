@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US Database - ZIP Lookup</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- ✅ FIXED MISSING SCRIPT -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
+
 <body>
 
-<!-- Zoho Style App Navbar with US Database Identity -->
+<!-- Navbar -->
 <div class="navbar">
     <div class="nav-title">US <span>Database</span></div>
     <div class="nav-links">
-        <!-- Link updated to external production deployment -->
         <a href="https://usdata.touchstone.workers.dev/" class="active">ZIP Lookup</a>
         <a href="vicidial.html">ViciDial Filter</a>
     </div>
@@ -21,16 +23,47 @@
 
 <div class="wrapper">
     <div class="card">
-        <h2>⚡ Fast ZIP Lookup + Excel Export</h2>
-        <span id="status">Loading data...</span>
 
-        <textarea id="zipInput" placeholder="Paste ZIP codes here (separated by commas, spaces, or newlines)..."></textarea>
+        <!-- ✅ TOP ROW (LEFT + RIGHT) -->
+        <div class="top-row">
 
-        <div class="btn-container">
-            <button class="search" onclick="searchZip()">Search Database</button>
-            <button class="download" onclick="downloadExcel()">Export Excel</button>
+            <!-- LEFT SIDE -->
+            <div class="left-panel">
+                <h2>⚡ Fast ZIP Lookup + Excel Export</h2>
+                <span id="status">Loading data...</span>
+
+                <textarea id="zipInput"
+                    placeholder="Paste ZIP codes here (separated by commas, spaces, or newlines)..."></textarea>
+
+                <div class="btn-container">
+                    <button class="search" onclick="searchZip()">Search Database</button>
+                    <button class="download" onclick="downloadExcel()">Export Excel</button>
+                </div>
+            </div>
+
+            <!-- ✅ RIGHT TOP (PIVOT TABLE) -->
+            <div class="pivot-box">
+                <h3>📊 State Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Total ZIPs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pivotBody">
+                        <tr>
+                            <td colspan="2" style="text-align:center;color:#94a3b8;">
+                                Run search to see summary
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
+        <!-- ✅ RESULTS TABLE (FULL WIDTH BELOW) -->
         <table>
             <thead>
                 <tr>
@@ -43,74 +76,120 @@
             </thead>
             <tbody id="resultBody">
                 <tr>
-                    <td colspan="5" style="text-align: center; color: #94a3b8; padding: 30px;">Enter ZIP numbers above to process lookup data.</td>
+                    <td colspan="5" style="text-align:center;color:#94a3b8;padding:30px;">
+                        Enter ZIP numbers above to process lookup data.
+                    </td>
                 </tr>
             </tbody>
         </table>
+
     </div>
 </div>
 
 <div class="watermark">Created by Nimo</div>
 
 <script>
-let zipMap={}, currentResults=[], jsonLoaded=false;
+
+let zipMap = {}, currentResults = [], jsonLoaded = false;
 const statusEl = document.getElementById('status');
 
 fetch('zipdata.json')
-.then(r=>r.json())
-.then(data=>{
-    data.forEach(item=>{
-        let z=String(item.zip);
-        zipMap[z]=item;
-        zipMap[z.padStart(5,'0')]=item;
+.then(r => r.json())
+.then(data => {
+
+    data.forEach(item => {
+        let z = String(item.zip);
+        zipMap[z] = item;
+        zipMap[z.padStart(5,'0')] = item;
     });
-    jsonLoaded=true;
-    // Applied success status state
+
+    jsonLoaded = true;
     statusEl.classList.add('loaded');
-    statusEl.innerText="✓ Database Loaded (" + data.length + " Records)";
-}).catch(err => {
+    statusEl.innerText = "✓ Database Loaded (" + data.length + " Records)";
+})
+.catch(err => {
     statusEl.classList.add('error');
     statusEl.innerText = "Error loading zipdata.json database file.";
 });
 
-function searchZip(){
-    let input=document.getElementById("zipInput").value.trim();
-    if(!input) return;
-    if(!jsonLoaded) { alert("Database still initializing. Please wait."); return; }
+function searchZip() {
 
-    let zips=input.split(/[\n, ]+/);
-    let html="";
-    currentResults=[];
+    let input = document.getElementById("zipInput").value.trim();
+    if (!input) return;
 
-    zips.forEach(z=>{
-        if(!z) return;
-        let r=zipMap[z]||zipMap[String(parseInt(z))]||zipMap[z.padStart(5,'0')];
+    if (!jsonLoaded) {
+        alert("Database still initializing. Please wait.");
+        return;
+    }
 
-        if(r){
+    let zips = input.split(/[\n, ]+/);
+    let html = "";
+    currentResults = [];
+
+    zips.forEach(z => {
+
+        if (!z) return;
+
+        let r = zipMap[z] || zipMap[String(parseInt(z))] || zipMap[z.padStart(5,'0')];
+
+        if (r) {
             currentResults.push(r);
-            html+=`<tr>
+
+            html += `<tr>
                 <td><strong>${z}</strong></td>
                 <td>${r.primary_city || r.city || '-'}</td>
                 <td>${r.state}</td>
-                <td>${r.county||'-'}</td>
-                <td>${r.area_codes||'-'}</td>
+                <td>${r.county || '-'}</td>
+                <td>${r.area_codes || '-'}</td>
             </tr>`;
         } else {
-            html+=`<tr><td><strong>${z}</strong></td><td colspan="4" style="color: #ef4444;">No Record Found</td></tr>`;
+            html += `<tr>
+                <td><strong>${z}</strong></td>
+                <td colspan="4" style="color:#ef4444;">No Record Found</td>
+            </tr>`;
         }
     });
 
-    document.getElementById("resultBody").innerHTML=html || '<tr><td colspan="5" style="text-align:center;">No valid input detected.</td></tr>';
+    document.getElementById("resultBody").innerHTML =
+        html || `<tr><td colspan="5" style="text-align:center;">No valid input detected.</td></tr>`;
+
+    /* ✅ PIVOT LOGIC */
+    let stateCounts = {};
+
+    currentResults.forEach(r => {
+        let state = r.state || "Unknown";
+        stateCounts[state] = (stateCounts[state] || 0) + 1;
+    });
+
+    let pivotHtml = "";
+
+    Object.entries(stateCounts)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([state, count]) => {
+
+            pivotHtml += `
+                <tr>
+                    <td>${state}</td>
+                    <td><strong>${count}</strong></td>
+                </tr>`;
+        });
+
+    document.getElementById("pivotBody").innerHTML =
+        pivotHtml || `<tr><td colspan="2">No data</td></tr>`;
 }
 
-// Global scope export method
-function downloadExcel(){
-    if(!currentResults.length) return alert("No valid result data available to export!");
-    let ws=XLSX.utils.json_to_sheet(currentResults);
-    let wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,"US_Database_Export");
-    XLSX.writeFile(wb,"US_DB_ZIP_Export.xlsx");
+function downloadExcel() {
+
+    if (!currentResults.length)
+        return alert("No valid result data available to export!");
+
+    let ws = XLSX.utils.json_to_sheet(currentResults);
+    let wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, "US_Database_Export");
+    XLSX.writeFile(wb, "US_DB_ZIP_Export.xlsx");
 }
+
 </script>
 
 </body>
