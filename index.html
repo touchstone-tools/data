@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- ✅ Excel Library (FIXED) -->
+    <!-- ✅ Excel library (fixed) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 
@@ -28,7 +28,7 @@
         <!-- ✅ TOP ROW -->
         <div class="top-row">
 
-            <!-- LEFT -->
+            <!-- LEFT (UNCHANGED UI) -->
             <div class="left-panel">
                 <h2>⚡ Fast ZIP Lookup + Excel Export</h2>
                 <span id="status">Loading data...</span>
@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <!-- ✅ RIGHT (WHITE PIVOT) -->
+            <!-- ✅ TOP-RIGHT PIVOT -->
             <div class="pivot-box">
                 <h3>📊 State Summary</h3>
                 <table>
@@ -54,7 +54,7 @@
                     </thead>
                     <tbody id="pivotBody">
                         <tr>
-                            <td colspan="2" style="text-align:center;color:#6b7280;">
+                            <td colspan="2" style="text-align:center;color:#94a3b8;">
                                 Run search to see summary
                             </td>
                         </tr>
@@ -64,7 +64,7 @@
 
         </div>
 
-        <!-- ✅ RESULT TABLE -->
+        <!-- ✅ RESULT TABLE (UNCHANGED) -->
         <table>
             <thead>
                 <tr>
@@ -153,7 +153,7 @@ function searchZip() {
 
     document.getElementById("resultBody").innerHTML = html;
 
-    /* ✅ PIVOT LOGIC */
+    // ✅ Pivot logic
     let stateCounts = {};
 
     currentResults.forEach(r => {
